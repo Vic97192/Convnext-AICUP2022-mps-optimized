@@ -15,7 +15,7 @@
 
 可參考 [ConvNeXt](https://github.com/facebookresearch/ConvNeXt/blob/main/INSTALL.md) 官網之安裝方式:
 
-Create an new conda virtual environment
+Create a new conda virtual environment
 ```
 conda create -n convnext python=3.8 -y
 conda activate convnext
@@ -67,7 +67,7 @@ import _collections_abc as container_abcs
 2. 如果工作目錄裡沒有 pretrained ConvNext_B 模型, 請至下面網址下載
 https://dl.fbaipublicfiles.com/convnext/convnext_base_22k_1k_224.pth
 
-3. 此專案所用之命令 (基於 MacBook air 10 core CPU, 10 core GPU, 16GB RAM, 512GB SSD)
+3. 此專案所用之命令 (基於 MacBook air M3 with 10 core CPU, 10 core GPU, 16GB RAM, 512GB SSD)
 
 python3 main_ai_cup_base_ema.py --model convnext_base --batch_size 12 --update_freq 21 --auto_resume False --input_size 360 --drop_path 0.5 --data_path /Volumes/VAP-512G/train --eval_data_path /Volumes/VAP-512G/val --aa rand-m9-mstd0.5-inc1 --use_amp False --data_set image_folder --nb_classes 33 --lr 0.0001 --output_dir /Volumes/VAP-512G/OUTPUT --weight_decay 1e-6 --epochs 90 --model_ema true --model_ema_eval true --num_workers 8
 
