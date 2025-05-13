@@ -22,7 +22,7 @@ conda activate convnext
 ```
 Install [Pytorch](https://pytorch.org/)>=1.8.0, [torchvision](https://pytorch.org/vision/stable/index.html)>=0.9.0 following official instructions. For example:
 ```
-pip install torch==1.8.0+cu111 torchvision==0.9.0+cu111 -f https://download.pytorch.org/whl/torch_stable.html
+pip3 install torch torchvision torchaudio
 pip install timm==0.3.2 tensorboardX six
 ```
 
