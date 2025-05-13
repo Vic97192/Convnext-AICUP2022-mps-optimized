@@ -1,8 +1,16 @@
 
-# ConvNeXt implementation for 2022 AI Cup
+# ConvNeXt Implementation for 2022 AI Cup (Optimized for Apple M-series GPUs)
 
-## 農地作物現況調查影像辨識競賽-秋季賽：AI作物影像判釋
+## 農地作物現況調查影像辨識競賽 - 秋季賽：AI作物影像判釋
 
+本專案基於 ConvNeXt 模型進行實作，並針對 **macOS + Apple Silicon (M1/M3/M4)** 環境進行深度優化，包含：
+
+- 支援 AMP（自動混合精度訓練，使用 bfloat16），將每個 epoch 時間從約 2 天縮短至 5 小時
+- 使用 MPS 後端時支援的 batch size 可達 24，超過 RTX 3060 Ti 上的 12
+- 現在可將 num_workers 設成小於 8 的數字。以往DataLoader 的 num_workers 設定為大於 0 時，整體訓練速度反而比 num_workers=0 更慢。
+- 支援 Channels Last 格式以提升卷積效率
+
+---
 ### 1. 環境安裝
 
 可參考 [ConvNeXt](https://github.com/facebookresearch/ConvNeXt/blob/main/INSTALL.md) 官網之安裝方式:
@@ -59,11 +67,17 @@ import _collections_abc as container_abcs
 2. 如果工作目錄裡沒有 pretrained ConvNext_B 模型, 請至下面網址下載
 https://dl.fbaipublicfiles.com/convnext/convnext_base_22k_1k_224.pth
 
-3. 競賽所用之命令 (基於 RTX2080 8GB DDR)
+3. 此專案所用之命令 (基於 MacBook air 10 core CPU, 10 core GPU, 16GB RAM, 512GB SSD)
 
 python3 main_ai_cup_base_ema.py --model convnext_base --batch_size 12 --update_freq 21 --auto_resume False --input_size 360 --drop_path 0.5 --data_path /Volumes/VAP-512G/train --eval_data_path /Volumes/VAP-512G/val --aa rand-m9-mstd0.5-inc1 --use_amp False --data_set image_folder --nb_classes 33 --lr 0.0001 --output_dir /Volumes/VAP-512G/OUTPUT --weight_decay 1e-6 --epochs 90 --model_ema true --model_ema_eval true --num_workers 8
 
-為方便debug，附上flag的參考格式。
-["--model","convnext_base","--batch_size","12","--device","mps","--update_freq","21","--auto_resume","False","--input_size","360","--drop_path","0.5","--data_path","/Volumes/VAP-512G/train","--eval_data_path","/Volumes/VAP-512G/val","--aa","rand-m9-mstd0.5-inc1","--use_amp","True","--data_set","image_folder","--nb_classes","33","--lr","0.0001","--output_dir","/Volumes/VAP-512G/OUTPUT","--weight_decay","1e-6","--epoch","90","--model_ema","true","model_ema_eval","true"]
+若需 debug，可使用此 flags 陣列：
+["--model","convnext_base","--batch_size","24","--device","mps","--update_freq","21","--auto_resume","False",
+ "--input_size","360","--drop_path","0.5","--data_path","/Volumes/VAP-512G/train",
+ "--eval_data_path","/Volumes/VAP-512G/val","--aa","rand-m9-mstd0.5-inc1","--use_amp","True",
+ "--data_set","image_folder","--nb_classes","33","--lr","0.0001",
+ "--output_dir","/Volumes/VAP-512G/OUTPUT","--weight_decay","1e-6","--epochs","90",
+ "--model_ema","true","--model_ema_eval","true","--num_workers","8"]
+
 
 由於上述 command 是將 ema 開啟, 因此會儲存一般與 ema 兩種模型, 經過測試, ema 模型結果比較好, 建議採用該組結果
