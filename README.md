@@ -26,7 +26,6 @@ pip3 install torch torchvision torchaudio
 pip install timm==0.3.2 tensorboardX six
 ```
 
-The results in the paper are produced with `torch==1.8.0+cu111 torchvision==0.9.0+cu111 timm==0.3.2`.
 
 註: 如果安裝之 pytorch > 1.8.0, 由於 torch._six 將部分 module 移除會導致錯誤出現, 建議將 timm helpers 裡的
 
